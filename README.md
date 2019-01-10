@@ -7,7 +7,7 @@ Branch edit
 make change to master
 rtr
 
-
+gh
 Intelligent Systems 2019
 ========================
 This is the practical material for the Intelligent Systems course, based on the
