@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 This is a test
 This is a fork test   
+=======
+This is after forking
+>>>>>>> master
 
 Intelligent Systems 2019
 ========================
