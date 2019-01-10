@@ -1,6 +1,7 @@
 This is a test
 This is a fork test   
 made a branch change
+Loan change
 
 Intelligent Systems 2019
 ========================
