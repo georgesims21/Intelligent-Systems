@@ -32,4 +32,8 @@ class Bot:
 
 
         # Return a random choice
-        return random.choice(moves)
+        #return random.choice(moves)
+        if len(moves) > 1:
+            return moves[1]
+        else:
+            return moves[0]
