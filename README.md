@@ -6,7 +6,7 @@ Branch edit
 
 make change to master
 
-loan change to master 
+
 
 Intelligent Systems 2019
 ========================
