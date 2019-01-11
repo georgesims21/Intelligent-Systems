@@ -93,7 +93,7 @@ print('Using seed {}.'.format(seed))
 random.seed(seed)
 
 # Parameters of our experiment
-STEPS = 10
+STEPS = 20
 REPEATS = 5
 
 inc = 1.0/STEPS
