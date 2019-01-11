@@ -49,11 +49,7 @@ class Bot:
 
         # Returns a random choice (new_array doesn't contain the best_non_trump_card value)
         if len(new_array) > 0:
-            print("YES")
             return random.choice(new_array)
-        else:
-            print("NO")
-            return random.choice(moves)
 
 def empty(n):
     """
