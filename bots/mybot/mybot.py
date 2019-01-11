@@ -32,10 +32,8 @@ class Bot:
 
 		moves_trump_suit = []
 
-<<<<<<< HEAD
         # Return a random choice
         return moves[len(moves) - 1]
-=======
         cards_hand = state.hand()
 
         for i, card in enumerate(cards_hand):
@@ -75,4 +73,3 @@ class Bot:
 				chosen_move = move
 
 		return chosen_move
->>>>>>> testG
