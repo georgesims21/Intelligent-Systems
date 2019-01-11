@@ -27,13 +27,47 @@ class Bot:
             potential spouse.
         """
 
-        # All legal moves
         moves = state.moves()
+		chosen_move = moves[0]
 
+		moves_trump_suit = []
 
-        # Return a random choice
-        #return random.choice(moves)
-        if len(moves) > 1:
-            return moves[1]
-        else:
-            return moves[0]
+        cards_hand = state.hand()
+
+        for i, card in enumerate(cards_hand):
+            rank, suit = util.get_card_name(card)
+            print('Card {} in the hand is {} of {}'.format(i, rank,suit))
+            """
+            TODO: get opponents played card and only play a larger card if it can beat the other, else play the lowest 
+            """ 
+
+		#Get all trump suit moves available
+		for index, move in enumerate(moves):
+
+			if move[0] is not None and Deck.get_suit(move[0]) == state.get_trump_suit():
+				moves_trump_suit.append(move)
+
+		# if len(moves_trump_suit) > 0:
+		# 	chosen_move = moves_trump_suit[0]
+		# 	return chosen_move
+
+		# If the opponent has played a card
+		if state.get_opponents_played_card() is not None:
+
+			moves_same_suit = []
+
+			# Get all moves of the same suit as the opponent's played card
+			for index, move in enumerate(moves):
+				if move[0] is not None and Deck.get_suit(move[0]) == Deck.get_suit(state.get_opponents_played_card()):
+					moves_same_suit.append(move)
+
+			if len(moves_same_suit) > 0:
+				chosen_move = moves_same_suit[0]
+				return chosen_move
+
+		# Get move with highest rank available, of any suit
+		for index, move in enumerate(moves):
+			if move[0] is not None and move[0] % 5 <= chosen_move[0] % 5:
+				chosen_move = move
+
+		return chosen_move
