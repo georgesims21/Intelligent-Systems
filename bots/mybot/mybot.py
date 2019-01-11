@@ -32,4 +32,4 @@ class Bot:
 
 
         # Return a random choice
-        return random.choice(moves)
+        return moves[len(moves) - 1]
