@@ -93,11 +93,7 @@ print('Using seed {}.'.format(seed))
 random.seed(seed)
 
 # Parameters of our experiment
-<<<<<<< Updated upstream
 STEPS = 20
-=======
-STEPS = 100
->>>>>>> Stashed changes
 REPEATS = 5
 
 inc = 1.0/STEPS

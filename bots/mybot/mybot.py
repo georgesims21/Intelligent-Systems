@@ -28,9 +28,6 @@ class Bot:
         """
 
         moves = state.moves()
-		chosen_move = moves[0]
-
-		moves_trump_suit = []
 
         # Return a random choice
-        return moves[len(moves) - 1]
+        return moves[0]
