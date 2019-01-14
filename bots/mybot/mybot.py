@@ -1,33 +1,90 @@
-"""
-RandomBot -- A simple strategy: enumerates all legal moves, and picks one
-uniformly at random.
+#!/usr/bin/env python
 """
 
-# Import the API objects
-from api import State
+
+"""
+
+from api import State, util
 import random
-
 
 class Bot:
 
-    def __init__(self):
-        pass
+    __max_depth = -1
+    __randomize = True
+
+    def __init__(self, randomize=True, depth=8):
+        self.__randomize = randomize
+        self.__max_depth = depth
 
     def get_move(self, state):
-        # type: (State) -> tuple[int, int]
+        val, move = self.value(state)
+
+        return move
+
+    def value(self, state, alpha=float('-inf'), beta=float('inf'), depth = 0):
         """
-        Function that gets called every turn. This is where to implement the strategies.
-        Be sure to make a legal move. Illegal moves, like giving an index of a card you
-        don't own or proposing an illegal mariage, will lose you the game.
-       	TODO: add some more explanation
-        :param State state: An object representing the gamestate. This includes a link to
-            the states of all the cards, the trick and the points.
-        :return: A tuple of integers or a tuple of an integer and None,
-            indicating a move; the first indicates the card played in the trick, the second a
-            potential spouse.
+        Return the value of this state and the associated move
+        :param State state:
+        :param float alpha: The highest score that the maximizing player can guarantee given current knowledge
+        :param float beta: The lowest score that the minimizing player can guarantee given current knowledge
+        :param int depth: How deep we are in the tree
+        :return val, move: the value of the state, and the best move.
         """
+
+        if state.finished():
+            winner, points = state.winner()
+            return (points, None) if winner == 1 else (-points, None)
+
+        if depth == self.__max_depth:
+            return heuristic(state)
+
+        best_value = float('-inf') if maximizing(state) else float('inf')
+        best_move = None
 
         moves = state.moves()
 
-        # Return a random choice
-        return moves[0]
+        if self.__randomize:
+            random.shuffle(moves)
+
+        for move in moves:
+
+            next_state = state.next(move)
+            value, _ = self.value(next_state)
+
+            if maximizing(state):
+                if value > best_value:
+                    best_value = value
+                    best_move = move
+                    alpha = best_value
+            else:
+                if value < best_value:
+                    best_value = value
+                    best_move = move
+                    beta = best_value
+
+            # Prune the search tree
+            # We know this state will never be chosen, so we stop evaluating its children
+            if beta <= alpha: #https://www.youtube.com/watch?v=l-hh51ncgDI
+                break
+
+        return best_value, best_move
+
+def maximizing(state):
+    # type: (State) -> bool
+    """
+    Whether we're the maximizing player (1) or the minimizing player (2).
+
+    :param state:
+    :return:
+    """
+    return state.whose_turn() == 1
+
+def heuristic(state):
+    # type: (State) -> float
+    """
+    Estimate the value of this state: -1.0 is a certain win for player 2, 1.0 is a certain win for player 1
+
+    :param state:
+    :return: A heuristic evaluation for the given state (between -1.0 and 1.0)
+    """
+    return util.ratio_points(state, 1), None
