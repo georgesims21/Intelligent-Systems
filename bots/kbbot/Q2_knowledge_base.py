@@ -11,8 +11,14 @@ D = Boolean('D')
 kb = KB()
 
 # Add clauses
-kb.add_clause(A, B, ~B, ~A)
-kb.add_clause(B)
+kb.add_clause(~A,C,D)
+kb.add_clause(~A,C,~D)
+kb.add_clause(~A,~C,D)
+kb.add_clause(~B,A)
+kb.add_clause(A,B)
+kb.add_clause(A,~B)
+kb.add_clause(~A,~B)
+
 
 
 # Print all models of the knowledge base

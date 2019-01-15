@@ -14,11 +14,7 @@ kb.add_clause(A, B, C)
 kb.add_clause(~A, B)
 kb.add_clause(~B, C)
 kb.add_clause(B, ~C)
-<<<<<<< Updated upstream
-=======
-# kb.add_clause(~B, ~C)
 
->>>>>>> Stashed changes
 # Print all models of the knowledge base
 for model in kb.models():
     print(model)

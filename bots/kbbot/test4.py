@@ -25,6 +25,7 @@ J16 = Boolean('j16')
 J17 = Boolean('j17')
 J18 = Boolean('j18')
 J19 = Boolean('j19')
+
 PJ0 = Boolean('pj0')
 PJ1 = Boolean('pj1')
 PJ2 = Boolean('pj2')
