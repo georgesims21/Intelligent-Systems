@@ -87,4 +87,5 @@ def heuristic(state):
     :param state:
     :return: A heuristic evaluation for the given state (between -1.0 and 1.0)
     """
-    return util.ratio_points(state, 1) * 2.0 - 1.0, None
+    # return util.ratio_points(state, 1) * 2.0 - 1.0, None
+    return 0.0

@@ -14,9 +14,42 @@ kb.add_clause(A, B, C)
 kb.add_clause(~A, B)
 kb.add_clause(~B, C)
 kb.add_clause(B, ~C)
+<<<<<<< Updated upstream
+=======
+# kb.add_clause(~B, ~C)
+
+>>>>>>> Stashed changes
 # Print all models of the knowledge base
 for model in kb.models():
     print(model)
 
 # Print out whether the KB is satisfiable (if there are no models, it is not satisfiable)
 print(kb.satisfiable())
+
+'''
+Q2)
+    (~A -> B)
+    (B -> A)
+    (A -> (C, D))
+
+# Define our symbols
+A = Boolean('A')
+B = Boolean('B')
+C = Boolean('C')
+D = Boolean('D')
+
+
+# Create a new knowledge base
+kb = KB()
+
+kb.add_clause(B and A)
+kb.add_clause(~B and A)
+kb.add_clause(~B and ~A)
+kb.add_clause(~A and B)
+kb.add_clause(A and B and C)
+kb.add_clause(~A and B and C)
+kb.add_clause(~A and B and ~C)
+kb.add_clause(~A and ~B and C)
+kb.add_clause(~A and ~B and ~C)
+
+'''
