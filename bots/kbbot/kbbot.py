@@ -52,7 +52,7 @@ class Bot:
             
             return chosen_move
 
-        # ------------------------------------- #
+        # ----------------------------------- #
         # Else our bot plays a strategy
 
         # Aces first
