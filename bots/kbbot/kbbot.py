@@ -8,7 +8,7 @@ It loads general information about the game, as well as the definition of a stra
 from load.py.
 """
 
-from api import State, util
+from api import State, util, Deck
 import random
 from . import load
 from .kb import KB, Boolean, Integer
@@ -21,8 +21,39 @@ class Bot:
     def get_move(self, state):
 
         moves = state.moves()
+        chosen_move = moves[0]
+        moves_trump_suit = []
 
         random.shuffle(moves)
+
+        # ----------------------------------- #
+        # If it's our turn, play a trump if possible, else we should
+        # play the highest card in the available moves
+
+        # If the opponent hasn't played a card
+        if state.get_opponents_played_card() is None:
+            
+            print("BOT PLAYS FIRST")
+
+            #Get all trump suit moves available
+            for index, move in enumerate(moves):
+                
+                if move[0] is not None and Deck.get_suit(move[0]) == state.get_trump_suit():
+                    moves_trump_suit.append(move)
+
+            # Return if a trump
+            if len(moves_trump_suit) > 0:
+                return moves_trump_suit[0]
+        
+        # Get move with highest rank available, of any suit
+            for index, move in enumerate(moves):
+                if move[0] is not None and move[0] % 5 <= chosen_move[0] % 5:
+                    chosen_move = move
+            
+            return chosen_move
+
+        # ------------------------------------- #
+        # Else our bot plays a strategy
 
         # Aces first
         for move in moves:
@@ -31,7 +62,7 @@ class Bot:
                 # Plays the first move that makes the kb inconsistent. We do not take
                 # into account that there might be other valid moves according to the strategy.
                 # Uncomment the next line if you want to see that something happens.
-                print ("Strategy Applied")
+                print ("ACE Strategy Applied")
                 return move
         # No aces then jacks
         for move in moves:
@@ -40,7 +71,7 @@ class Bot:
                 # Plays the first move that makes the kb inconsistent. We do not take
                 # into account that there might be other valid moves according to the strategy.
                 # Uncomment the next line if you want to see that something happens.
-                print ("Strategy Applied")
+                print ("JACK Strategy Applied")
                 return move
 
         # If no move that is entailed by the kb is found, play random move
