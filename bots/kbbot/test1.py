@@ -1,4 +1,4 @@
-import kb, sys
+import sys
 from kb import KB, Boolean, Integer, Constant
 
 # Define our symbols
@@ -21,31 +21,3 @@ for model in kb.models():
 
 # Print out whether the KB is satisfiable (if there are no models, it is not satisfiable)
 print(kb.satisfiable())
-
-'''
-Q2)
-    (~A -> B)
-    (B -> A)
-    (A -> (C, D))
-
-# Define our symbols
-A = Boolean('A')
-B = Boolean('B')
-C = Boolean('C')
-D = Boolean('D')
-
-
-# Create a new knowledge base
-kb = KB()
-
-kb.add_clause(B and A)
-kb.add_clause(~B and A)
-kb.add_clause(~B and ~A)
-kb.add_clause(~A and B)
-kb.add_clause(A and B and C)
-kb.add_clause(~A and B and C)
-kb.add_clause(~A and B and ~C)
-kb.add_clause(~A and ~B and C)
-kb.add_clause(~A and ~B and ~C)
-
-'''
