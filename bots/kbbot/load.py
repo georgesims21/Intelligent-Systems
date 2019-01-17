@@ -1,4 +1,4 @@
-# from .kb import KB, Boolean, Integer
+from .kb import KB, Boolean, Integer
 
 # # Define our propositional symbols
 # # J1 is true if the card with index 1 is a jack, etc
@@ -72,7 +72,7 @@
 # # Add here other strategies
 
 
-from .kb import KB, Boolean, Integer
+# from .kb import KB, Boolean, Integer
 
 # Initialise all variables that you need for you strategies and game knowledge.
 # Add those variables here.. The following list is complete for the Play Jack strategy.
@@ -159,7 +159,30 @@ PA17 = Boolean('pa17')
 PA18 = Boolean('pa18')
 PA19 = Boolean('pa19')
 
-def general_information(kb):
+def jacks_information(kb):
+    # GENERAL INFORMATION ABOUT THE CARDS
+    # This adds information which cards are Jacks
+    kb.add_clause(J4)
+    kb.add_clause(J9)
+    kb.add_clause(J14)
+    kb.add_clause(J19)
+    # Add here whatever is needed for your strategy.
+
+def jacks_knowledge(kb):
+    # DEFINITION OF THE STRATEGY
+    # Add clauses (This list is sufficient for this strategy)
+    # PJ is the strategy to play jacks first, so all we need to model is all x PJ(x) <-> J(x),
+    # In other words that the PJ strategy should play a card when it is a jack
+    kb.add_clause(~J4, PJ4)
+    kb.add_clause(~J9, PJ9)
+    kb.add_clause(~J14, PJ14)
+    kb.add_clause(~J19, PJ19)
+    kb.add_clause(~PJ4, J4)
+    kb.add_clause(~PJ9, J9)
+    kb.add_clause(~PJ14, J14)
+    kb.add_clause(~PJ19, J19)
+
+def aces_information(kb):
     # GENERAL INFORMATION ABOUT THE CARDS
     # This adds information which cards are Jacks
     kb.add_clause(A0)
@@ -168,7 +191,7 @@ def general_information(kb):
     kb.add_clause(A15)
     # Add here whatever is needed for your strategy.
 
-def strategy_knowledge(kb):
+def aces_knowledge(kb):
     # DEFINITION OF THE STRATEGY
     # Add clauses (This list is sufficient for this strategy)
     # PJ is the strategy to play jacks first, so all we need to model is all x PJ(x) <-> J(x),
@@ -181,3 +204,86 @@ def strategy_knowledge(kb):
     kb.add_clause(~PA5, A5)
     kb.add_clause(~PA10, A10)
     kb.add_clause(~PA15, A15)
+
+# Define our propositional symbols
+# J1 is true if the card with index 1 is a jack, etc
+# You need to initialise all variables that you need for you strategies and game knowledge.
+# Add those variables here.. The following list is complete for the Play Jack strategy.
+
+# '''
+# TODO:   Tried changing all to AC, ... , JS and their strings to 'a1', ... , 'j1' ERROR: 
+#             returned a move None that was not a pair (i.e. (2,3)
+#         Tried changing all to AC, ... , JS and their strings to 'ac', ... , 'js' ERROR:
+#             returned a move None that was not a pair (i.e. (2,3)
+# '''
+# AC = Boolean('ac')
+# TC = Boolean('tc')
+# KC = Boolean('kc')
+# QC = Boolean('qc')
+# JC = Boolean('jc')
+# AD = Boolean('ad')
+# TD = Boolean('td')
+# KD = Boolean('kd')
+# QD = Boolean('qd')
+# JD = Boolean('jd')
+# AH = Boolean('ah')
+# TH = Boolean('th')
+# KH = Boolean('kh')
+# QH = Boolean('qh')
+# JH = Boolean('jh')
+# AS = Boolean('as')
+# TS = Boolean('ts')
+# KS = Boolean('ks')
+# QS = Boolean('qs')
+# JS = Boolean('js')
+
+# PAC = Boolean('pac')
+# PTC = Boolean('ptc')
+# PKC = Boolean('pkc')
+# PQC = Boolean('pqc')
+# PJC = Boolean('pjc')
+# PAD = Boolean('pad')
+# PTD = Boolean('ptd')
+# PKD = Boolean('pkd')
+# PQD = Boolean('pqd')
+# PJD = Boolean('pjd')
+# PAH = Boolean('pah')
+# PTH = Boolean('pth')
+# PKH = Boolean('pkh')
+# PQH = Boolean('pqh')
+# PJH = Boolean('pjh')
+# PAS = Boolean('pas')
+# PTS = Boolean('pts')
+# PKS = Boolean('pks')
+# PQS = Boolean('pqs')
+# PJS = Boolean('pjs')
+
+# # Create a new knowledge base
+# kb = KB()
+
+# def general_information(kb):
+#     # GENERAL INFORMATION ABOUT THE CARDS
+#     # This adds information which cards are Jacks
+#     kb.add_clause(JC)
+#     kb.add_clause(JD)
+#     kb.add_clause(JH)
+#     kb.add_clause(JS)
+#     # Add here whatever is needed for your strategy.
+
+# def strategy_knowledge(kb):
+#     # DEFINITION OF THE STRATEGY
+#     # Add clauses (This list is sufficient for this strategy)
+#     # PJ is the strategy to play jacks first, so all we need to model is all x PJ(x) <-> J(x),
+#     # In other words that the PJ strategy should play a card when it is a jack
+#     kb.add_clause(~JC, PJC)
+#     kb.add_clause(~JD, PJD)
+#     kb.add_clause(~JH, PJH)
+#     kb.add_clause(~JS, PJS)
+#     kb.add_clause(~PJC, JC)
+#     kb.add_clause(~PJD, JD)
+#     kb.add_clause(~PJH, JH)
+#     kb.add_clause(~PJS, JS)
+#     # Add here other strategies
+
+# kb.add_clause(~JC)
+
