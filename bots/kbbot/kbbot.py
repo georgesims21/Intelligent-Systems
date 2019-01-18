@@ -33,7 +33,7 @@ class Bot:
         # If the opponent hasn't played a card
         if state.get_opponents_played_card() is None:
             
-            print("BOT PLAYS FIRST")
+            print("WE PLAY FIRST")
 
             #Get all trump suit moves available
             for index, move in enumerate(moves):
@@ -56,27 +56,28 @@ class Bot:
         # Else our bot plays a strategy
 
         # Aces first
-        for move in moves:
+        else:
+            for move in moves:
 
-            if not self.aces_consistent(state, move):
-                # Plays the first move that makes the kb inconsistent. We do not take
-                # into account that there might be other valid moves according to the strategy.
-                # Uncomment the next line if you want to see that something happens.
-                print ("ACE Strategy Applied")
-                return move
-        # No aces then jacks
-        for move in moves:
+                if not self.aces_consistent(state, move):
+                    # Plays the first move that makes the kb inconsistent. We do not take
+                    # into account that there might be other valid moves according to the strategy.
+                    # Uncomment the next line if you want to see that something happens.
+                    print ("ACE Strategy Applied")
+                    return move
+            # No aces then jacks
+            for move in moves:
 
-            if not self.jacks_consistent(state, move):
-                # Plays the first move that makes the kb inconsistent. We do not take
-                # into account that there might be other valid moves according to the strategy.
-                # Uncomment the next line if you want to see that something happens.
-                print ("JACK Strategy Applied")
-                return move
+                if not self.jacks_consistent(state, move):
+                    # Plays the first move that makes the kb inconsistent. We do not take
+                    # into account that there might be other valid moves according to the strategy.
+                    # Uncomment the next line if you want to see that something happens.
+                    print ("JACK Strategy Applied")
+                    return move
 
-        # If no move that is entailed by the kb is found, play random move
-        print ("Strategy Not Applied")
-        return random.choice(moves)
+            # If no move that is entailed by the kb is found, play random move
+            print ("Strategy Not Applied")
+            return random.choice(moves)
 
     # Note: In this example, the state object is not used,
     # but you might want to do it for your own strategy.
