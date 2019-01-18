@@ -23,13 +23,8 @@ class Bot:
         moves = state.moves()
         chosen_move = moves[0]
         moves_trump_suit = []
-        opp_move = []
 
         random.shuffle(moves)
-
-        # ----------------------------------- #
-        # If it's our turn, play a trump if possible, else we should
-        # play the highest card in the available moves
 
         # If the opponent hasn't played a card
         if state.get_opponents_played_card() is None:
@@ -53,14 +48,12 @@ class Bot:
             
             return chosen_move
 
-        # ----------------------------------- #
         # Else our bot plays a strategy
-
-        
         else:
 
             '''
-            TODO: Implement the play trump tactic if we don't have a legible card to play
+            TODO:   Implement the play trump tactic if we don't have a legible card to play
+                    Optimize cheap strategy to play lowest card first
             '''
 
             # Is our best card worse than the opponents played card?
@@ -128,67 +121,29 @@ class Bot:
         return jkb.satisfiable()
 
     def aces_consistent(self, state, move):
-        # type: (State, move) -> bool
-
-        # each time we check for consistency we initialise a new knowledge-base
         akb = KB()
 
-        # Add general information about the game
         load.aces_information(akb)
-
-        # Add the necessary knowledge about the strategy
         load.aces_knowledge(akb)
-
-        # This line stores the index of the card in the deck.
-        # If this doesn't make sense, refer to _deck.py for the card index mapping
         index = move[0]
 
-        # This creates the string which is used to make the strategy_variable.
-        # Note that as far as kb.py is concerned, two objects created with the same
-        # string in the constructor are equivalent, and are seen as the same symbol.
-        # Here we use "pj" to indicate that the card with index "index" should be played with the
-        # PlayJack heuristics that was defined in class. Initialise a different variable if 
-        # you want to apply a different strategy (that you will have to define in load.py)
         variable_string = "p" + str(index)
         strategy_variable = Boolean(variable_string)
 
-        # Add the relevant clause to the loaded knowledge base
         akb.add_clause(~strategy_variable)
-
-        # If the knowledge base is not satisfiable, the strategy variable is
-        # entailed (proof by refutation)
 
         return akb.satisfiable()
 
     def cheap_consistent(self, state, move):
-        # type: (State, move) -> bool
-
-        # each time we check for consistency we initialise a new knowledge-base
         kb = KB()
 
-        # Add general information about the game
         load.cheap_information(kb)
-
-        # Add the necessary knowledge about the strategy
         load.cheap_knowledge(kb)
-
-        # This line stores the index of the card in the deck.
-        # If this doesn't make sense, refer to _deck.py for the card index mapping
         index = move[0]
 
-        # This creates the string which is used to make the strategy_variable.
-        # Note that as far as kb.py is concerned, two objects created with the same
-        # string in the constructor are equivalent, and are seen as the same symbol.
-        # Here we use "pj" to indicate that the card with index "index" should be played with the
-        # PlayJack heuristics that was defined in class. Initialise a different variable if 
-        # you want to apply a different strategy (that you will have to define in load.py)
         variable_string = "p" + str(index)
         strategy_variable = Boolean(variable_string)
 
-        # Add the relevant clause to the loaded knowledge base
         kb.add_clause(~strategy_variable)
-
-        # If the knowledge base is not satisfiable, the strategy variable is
-        # entailed (proof by refutation)
 
         return kb.satisfiable()
