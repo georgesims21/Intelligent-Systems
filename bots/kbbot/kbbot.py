@@ -23,6 +23,7 @@ class Bot:
         moves = state.moves()
         chosen_move = moves[0]
         moves_trump_suit = []
+        opp_move = []
 
         random.shuffle(moves)
 
@@ -55,35 +56,37 @@ class Bot:
         # ----------------------------------- #
         # Else our bot plays a strategy
 
-        # Aces first
+        
         else:
-            for move in moves:
 
-                if not self.aces_consistent(state, move):
-                    # Plays the first move that makes the kb inconsistent. We do not take
-                    # into account that there might be other valid moves according to the strategy.
-                    # Uncomment the next line if you want to see that something happens.
-                    print ("ACE Strategy Applied")
-                    return move
+            '''
+            TODO: Implement the play trump tactic if we don't have a legible card to play
+            '''
 
-            # No aces then jacks
-            for move in moves:
+            # Is our best card worse than the opponents played card?
+            for index, move in enumerate(moves):
+                if move[0] is not None and move[0] % 5 <= chosen_move[0] % 5:
+                    chosen_move = move
+            
+            if chosen_move[0] % 5 > state.get_opponents_played_card() % 5:
+                # Play our cheapest card if we can't beat it. Less than (<) due to if less than equal (<=) card is
+                # not legible.. unless trump card
+                for move in moves:
+                    if not self.cheap_consistent(state, move):
+                        print ("CHEAP Strategy Applied")
+                        return move
+            else:
+                # Aces first
+                for move in moves:
+                    if not self.aces_consistent(state, move):
+                        print ("ACE Strategy Applied")
+                        return move
 
-                if not self.jacks_consistent(state, move):
-                    # Plays the first move that makes the kb inconsistent. We do not take
-                    # into account that there might be other valid moves according to the strategy.
-                    # Uncomment the next line if you want to see that something happens.
-                    print ("JACK Strategy Applied")
-                    return move
-
-            for move in moves:
-
-                if not self.cheap_consistent(state, move):
-                    # Plays the first move that makes the kb inconsistent. We do not take
-                    # into account that there might be other valid moves according to the strategy.
-                    # Uncomment the next line if you want to see that something happens.
-                    print ("CHEAP Strategy Applied")
-                    return move
+                # No aces then jacks
+                for move in moves:
+                    if not self.jacks_consistent(state, move):
+                        print ("JACK Strategy Applied")
+                        return move
 
             # If no move that is entailed by the kb is found, play random move
             print ("Strategy Not Applied")
@@ -113,7 +116,7 @@ class Bot:
         # Here we use "pj" to indicate that the card with index "index" should be played with the
         # PlayJack heuristics that was defined in class. Initialise a different variable if 
         # you want to apply a different strategy (that you will have to define in load.py)
-        variable_string = "pj" + str(index)
+        variable_string = "p" + str(index)
         strategy_variable = Boolean(variable_string)
 
         # Add the relevant clause to the loaded knowledge base
@@ -146,7 +149,7 @@ class Bot:
         # Here we use "pj" to indicate that the card with index "index" should be played with the
         # PlayJack heuristics that was defined in class. Initialise a different variable if 
         # you want to apply a different strategy (that you will have to define in load.py)
-        variable_string = "pa" + str(index)
+        variable_string = "p" + str(index)
         strategy_variable = Boolean(variable_string)
 
         # Add the relevant clause to the loaded knowledge base
