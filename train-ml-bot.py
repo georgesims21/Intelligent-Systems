@@ -11,6 +11,9 @@ from api import State, util
 import sys
 import sklearn
 import sklearn.linear_model
+
+import os
+
 from sklearn.externals import joblib
 from sklearn.naive_bayes import GaussianNB
 
@@ -24,6 +27,10 @@ from bots.rdeep import rdeep
 >>>>>>> master
 
 from bots.ml.ml import features
+
+DEFAULT_MODEL = os.path.dirname(os.path.realpath(__file__)) + '/bots/ml/model.pkl'
+__model = None
+__model = joblib.load(DEFAULT_MODEL)
 
 # How many games to play
 GAMES = 100
@@ -43,6 +50,7 @@ player = bully.Bot()
 
 data = []
 target = []
+target2 = []
 
 for g in range(GAMES):
 
@@ -84,9 +92,16 @@ for g in range(GAMES):
 
 # Train a logistic regression model
 learner = sklearn.linear_model.LogisticRegression()
+<<<<<<< Updated upstream
 #learner = sklearn.naive_bayes.GaussianNB()
 
+=======
+model2 = learner.fit(__model, target2)
+>>>>>>> Stashed changes
 model = learner.fit(data, target)
+
+# model = model + model2
+
 
 # Check for class imbalance
 count = {}
