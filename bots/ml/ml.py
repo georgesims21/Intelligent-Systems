@@ -56,7 +56,8 @@ class Bot:
             # IMPLEMENT: Add a function call so that 'value' will
             # contain the predicted value of 'next_state'
             # NOTE: This is different from the line in the minimax/alphabeta bot
-            value = get_move(next_state)
+            
+            value = self.heuristic(next_state)
 
             if maximizing(state):
                 if value > best_value:
@@ -116,7 +117,7 @@ def features(state):
     p1_pending_points = state.get_pending_points(1)
 
     # Add plauer 2's pending points to feature set
-    p2_pending_points = state.get_pending_points(1)
+    p2_pending_points = state.get_pending_points(2)
 
     # Get trump suit
     trump_suit = state.get_trump_suit()

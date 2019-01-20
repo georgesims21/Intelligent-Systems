@@ -29,7 +29,7 @@ class Bot:
         # If the opponent hasn't played a card
         if state.get_opponents_played_card() is None:
             
-            print("WE PLAY FIRST")
+            #print("WE PLAY FIRST")
 
             #Get all trump suit moves available
             for index, move in enumerate(moves):
@@ -66,23 +66,23 @@ class Bot:
                 # not legible.. unless trump card
                 for move in moves:
                     if not self.cheap_consistent(state, move):
-                        print ("CHEAP Strategy Applied")
+                        #print ("CHEAP Strategy Applied")
                         return move
             else:
                 # Aces first
                 for move in moves:
                     if not self.aces_consistent(state, move):
-                        print ("ACE Strategy Applied")
+                        #print ("ACE Strategy Applied")
                         return move
 
                 # No aces then jacks
                 for move in moves:
                     if not self.jacks_consistent(state, move):
-                        print ("JACK Strategy Applied")
+                        #print ("JACK Strategy Applied")
                         return move
 
             # If no move that is entailed by the kb is found, play random move
-            print ("Strategy Not Applied")
+            #print ("Strategy Not Applied")
             return random.choice(moves)
 
     # Note: In this example, the state object is not used,
