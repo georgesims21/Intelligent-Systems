@@ -14,6 +14,7 @@ import sklearn.linear_model
 from sklearn.externals import joblib
 
 from bots.rand import rand
+from bots.bully import bully
 # from bots.rdeep import rdeep
 
 from bots.ml.ml import features
@@ -25,7 +26,8 @@ GAMES = 10000
 PHASE = 1
 
 # The player we'll observe
-player = rand.Bot()
+# player = rand.Bot()
+player = bully.Bot()
 # player = rdeep.Bot()
 
 data = []
