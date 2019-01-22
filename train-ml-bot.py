@@ -17,7 +17,11 @@ from sklearn.naive_bayes import GaussianNB
 import random, os
 from bots.rand import rand
 from bots.bully import bully
+<<<<<<< HEAD
 from bots.rdeep import rdeep
+=======
+# from bots.rdeep import rdeep
+>>>>>>> master
 
 from bots.ml.ml import features
 
@@ -28,8 +32,14 @@ GAMES = 100
 PHASE = 1
 
 # The player we'll observe
+<<<<<<< HEAD
 #player = bully.Bot()
 player = rdeep.Bot()
+=======
+# player = rand.Bot()
+player = bully.Bot()
+# player = rdeep.Bot()
+>>>>>>> master
 
 data = []
 target = []
