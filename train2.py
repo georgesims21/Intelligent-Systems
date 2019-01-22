@@ -12,25 +12,24 @@ import sys
 import sklearn
 import sklearn.linear_model
 from sklearn.externals import joblib
-from sklearn.naive_bayes import GaussianNB
 
 import random, os
 from bots.rand import rand
 from bots.bully import bully
-# from bots.rdeep import rdeep
+from bots.rdeep import rdeep
+from bots.ml import ml2
 
 from bots.ml.ml import features
 
 # How many games to play
-GAMES = 100
+GAMES = 1000
 
 # Which phase the game starts in
 PHASE = 1
 
 # The player we'll observe
-# player = rand.Bot()
-player = bully.Bot()
-# player = rdeep.Bot()
+#player = bully.Bot()
+player = ml2.Bot()
 
 data = []
 target = []
@@ -75,7 +74,6 @@ for g in range(GAMES):
 
 # Train a logistic regression model
 learner = sklearn.linear_model.LogisticRegression()
-#learner = sklearn.naive_bayes.GaussianNB()
 
 model = learner.fit(data, target)
 
@@ -89,7 +87,7 @@ for str in target:
 print('instances per class: {}'.format(count))
 
 
-with open('./bots/ml/rdeep.pkl', 'wb') as fo:
+with open('./bots/ml/ml.pkl', 'wb') as fo:
     joblib.dump(model, fo)
 # Store the model in the ml directory
 
