@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-A basic adaptive bot. This is part of the third worksheet.
+A basic adaptive bot. This is part of the third worksheet. Test
 
 """
 
