@@ -15,42 +15,25 @@ import sklearn.linear_model
 import os
 
 from sklearn.externals import joblib
-from sklearn.naive_bayes import GaussianNB
 
 import random, os
 from bots.rand import rand
 from bots.bully import bully
-<<<<<<< HEAD
 from bots.rdeep import rdeep
-=======
-# from bots.rdeep import rdeep
->>>>>>> master
-
+from bots.ml import ml
 from bots.ml.ml import features
-
-DEFAULT_MODEL = os.path.dirname(os.path.realpath(__file__)) + '/bots/ml/model.pkl'
-__model = None
-__model = joblib.load(DEFAULT_MODEL)
-
 # How many games to play
-GAMES = 100
+GAMES = 1000
 
 # Which phase the game starts in
 PHASE = 1
 
 # The player we'll observe
-<<<<<<< HEAD
-#player = bully.Bot()
-player = rdeep.Bot()
-=======
-# player = rand.Bot()
-player = bully.Bot()
-# player = rdeep.Bot()
->>>>>>> master
+player = ml.Bot(model_file='./bots/ml/rdeep.pkl')
+# player2 = ml.Bot(model_file='./models/rdeep-model.pkl')
 
 data = []
 target = []
-target2 = []
 
 for g in range(GAMES):
 
@@ -92,12 +75,8 @@ for g in range(GAMES):
 
 # Train a logistic regression model
 learner = sklearn.linear_model.LogisticRegression()
-<<<<<<< Updated upstream
 #learner = sklearn.naive_bayes.GaussianNB()
 
-=======
-model2 = learner.fit(__model, target2)
->>>>>>> Stashed changes
 model = learner.fit(data, target)
 
 # model = model + model2
@@ -113,8 +92,8 @@ for str in target:
 print('instances per class: {}'.format(count))
 
 
-with open('./bots/ml/rdeep.pkl', 'wb') as fo:
+with open('./bots/ml/ml2-model.pkl', 'wb') as fo:
     joblib.dump(model, fo)
-# Store the model in the ml directory
+# Store the model in the ml directory DO WE NEED TO CLOSE THIS?
 
 print('Done')

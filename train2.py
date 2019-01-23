@@ -17,7 +17,8 @@ import random, os
 from bots.rand import rand
 from bots.bully import bully
 from bots.rdeep import rdeep
-from bots.ml import ml2
+from bots.ml import ml
+from bots.ml2 import ml2
 
 from bots.ml.ml import features
 
@@ -28,8 +29,9 @@ GAMES = 1000
 PHASE = 1
 
 # The player we'll observe
-#player = bully.Bot()
-player = ml2.Bot()
+player = ml.Bot(model_file='./bots/ml/ml2-model.pkl')
+# player2 = ml.Bot(model_file='./models/rdeep-model.pkl')
+
 
 data = []
 target = []
@@ -87,7 +89,7 @@ for str in target:
 print('instances per class: {}'.format(count))
 
 
-with open('./bots/ml/ml.pkl', 'wb') as fo:
+with open('./bots/ml/ml2-model.pkl', 'wb') as fo:
     joblib.dump(model, fo)
 # Store the model in the ml directory
 
