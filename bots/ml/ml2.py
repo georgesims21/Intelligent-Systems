@@ -12,7 +12,8 @@ from sklearn.externals import joblib
 
 # Path of the model we will use. If you make a model
 # with a different name, point this line to its path.
-DEFAULT_MODEL = os.path.dirname(os.path.realpath(__file__)) + '/ml2-model.pkl'
+DEFAULT_MODEL = os.path.dirname(os.path.realpath(__file__)) + './models/ml/ml-model.pkl'
+
 class Bot:
 
     __randomize = True
