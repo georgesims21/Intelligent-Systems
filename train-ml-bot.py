@@ -29,7 +29,7 @@ from bots.ml import ml
 >>>>>>> Making two ml bots (ml & ml2) play against eachother
 from bots.ml.ml import features
 
-def create_dataset(path, player=rand.Bot(), games=2000, phase=1):
+def create_dataset(path, player=bully.Bot(), games=2000, phase=1):
 
 # The player we'll observe
 <<<<<<< Loan
@@ -120,7 +120,7 @@ parser.add_argument("--no-train",
 options = parser.parse_args()
 
 if options.overwrite or not os.path.isfile(options.dset_path):
-    create_dataset(options.dset_path, player=rand.Bot(), games=10000)
+    create_dataset(options.dset_path, player=bully.Bot(), games=10000)
 
 if options.train:
 
