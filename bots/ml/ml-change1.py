@@ -136,6 +136,9 @@ def features(state):
     # Add opponent's played card to feature set
     opponents_played_card = state.get_opponents_played_card()
 
+    # Find out which state the game is in
+    phase = state.get_phase()
+
 
     ################## You do not need to do anything below this line ########################
 
