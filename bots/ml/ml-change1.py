@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-A basic adaptive bot. This is part of the third worksheet. Test
+A basic adaptive bot. This is part of the third worksheet. 
 
 """
 
@@ -135,6 +135,9 @@ def features(state):
 
     # Add opponent's played card to feature set
     opponents_played_card = state.get_opponents_played_card()
+
+    # Find out which state the game is in
+    phase = state.get_phase()
 
 
     ################## You do not need to do anything below this line ########################
