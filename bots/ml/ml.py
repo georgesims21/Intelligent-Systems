@@ -4,9 +4,10 @@ A basic adaptive bot. This is part of the third worksheet.
 
 """
 
-from api import State, util
+from api import State, util, Deck
 import random, os
 from itertools import chain
+
 
 from sklearn.externals import joblib
 
@@ -56,7 +57,7 @@ class Bot:
             # IMPLEMENT: Add a function call so that 'value' will
             # contain the predicted value of 'next_state'
             # NOTE: This is different from the line in the minimax/alphabeta bot
-            value = ???
+            value = self.heuristic(next_state)
 
             if maximizing(state):
                 if value > best_value:
@@ -107,34 +108,37 @@ def features(state):
     feature_set = []
 
     # Add player 1's points to feature set
-    p1_points = ???
+    p1_points = state.get_points(1)
 
     # Add player 2's points to feature set
-    p2_points = ???
+    p2_points = state.get_points(2)
 
     # Add player 1's pending points to feature set
-    p1_pending_points = ???
+    p1_pending_points = state.get_pending_points(1)
 
     # Add plauer 2's pending points to feature set
-    p2_pending_points = ???
+    p2_pending_points = state.get_pending_points(2)
 
     # Get trump suit
-    trump_suit = ???
+    trump_suit = state.get_trump_suit()
 
     # Add phase to feature set
-    phase = ???
+    phase = state.get_phase()
 
     # Add stock size to feature set
-    stock_size = ???
+    stock_size = state.get_stock_size()
 
     # Add leader to feature set
-    leader = ???
+    leader = state.leader()
 
     # Add whose turn it is to feature set
-    whose_turn = ???
+    whose_turn = state.whose_turn()
 
     # Add opponent's played card to feature set
-    opponents_played_card = ???
+    opponents_played_card = state.get_opponents_played_card()
+
+    # Get moves
+    current_hand = state.hand()
 
 
     ################## You do not need to do anything below this line ########################
@@ -186,6 +190,45 @@ def features(state):
     opponents_played_card_onehot = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     opponents_played_card_onehot[opponents_played_card if opponents_played_card is not None else 20] = 1
     feature_set += opponents_played_card_onehot
+
+    # To find jack of trumps
+
+    # moves = state.hand()
+
+    # for index, moves in enumerate(moves):
+    #     if index % 5 == 5:
+    #         feature_set += [1, 0]
+    #     else:
+    #         feature_set += [0, 1]
+
+    # # To find ace of trumps
+    # for index, move in enumerate(moves):
+    #     if index is not None and index % 5 == 0:
+    #         feature_set += [1, 0]
+    #     else:
+    #         feature_set += [0, 1]
+
+    # current_hand_trump_onehot = [0, 0, 0, 0, 0]
+
+    # for card in current_hand:
+    #     # ACE
+    #     if card % 5 == 0:
+    #         current_hand_trump_onehot = [1, 0, 0, 0, 0]
+    #     # TEN
+    #     elif card % 5 == 1:
+    #         current_hand_trump_onehot = [0, 1, 0, 0, 0]
+    #     # KING
+    #     elif card % 5 == 2:
+    #         current_hand_trump_onehot = [0, 0, 1, 0, 0]
+    #     # QUEEN
+    #     elif card % 5 == 3:
+    #         current_hand_trump_onehot = [0, 0, 0, 1, 0]
+    #     # JACK
+    #     elif card % 5 == 4:
+    #         current_hand_trump_onehot = [0, 0, 0, 0, 1]
+
+    #     feature_set += current_hand_trump_onehot
+
 
     # Return feature set
     return feature_set
