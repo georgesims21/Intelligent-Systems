@@ -13,6 +13,8 @@ import random
 from . import load
 from .kb import KB, Boolean, Integer
 
+played_cards = []
+
 class Bot:
 
     def __init__(self):
@@ -64,6 +66,15 @@ class Bot:
         total_jacks_in_deck = 4
         my_aces = 0
 
+        if state.get_prev_trick() != [None, None]:
+            card1, card2 = state.get_prev_trick()
+            played_cards.append(card1)
+            played_cards.append(card2)
+        
+        for index in played_cards:
+            if index % 5 == 0:
+                played_aces = played_aces + 1
+
         hand = state.hand()
 
         # Negate hand cards from possibilities
@@ -81,11 +92,12 @@ class Bot:
             elif index % 5 == 4:
                 total_jacks_in_deck = total_jacks_in_deck - 1
         
-        secret_formula = 1 - (((size_of_stock - my_aces) / 5) / (20 / 5))
+        secret_formula = 1 - (((size_of_stock + my_aces) / 5) / (20 / 5))
+        # secret_formula = ((my_aces + played_aces) / size_of_stock + 5)
 
-        print("MY ACES = ", my_aces)
+        # print("FORMULA = ", secret_formula)
 
-        if secret_formula < 0.2:
+        if my_aces > 0:
             print("I HAVE AN ACE")
             
 
