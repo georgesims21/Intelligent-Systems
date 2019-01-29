@@ -13,27 +13,48 @@ import random
 from . import load
 from .kb import KB, Boolean, Integer
 
+played_cards = []
+
+
 class Bot:
 
     def __init__(self):
         pass
-
     def get_move(self, state):
 
         moves = state.moves()
         chosen_move = moves[0]
         moves_trump_suit = []
-
         random.shuffle(moves)
+        if state.get_prev_trick() != [None,None]:
+            card1,card2 = state.get_prev_trick()
+            played_cards.append(card1)
+            played_cards.append(card2)
+
+        #Get the number of trump card played
+        trump_played = 0
+        if len(played_cards) != 0:
+            for card in played_cards:
+                if util.get_suit(card) == state.get_trump_suit():
+                    trump_played += 1
+               
 
         # If the opponent hasn't played a card
         if state.get_opponents_played_card() is None:
             
             #print("WE PLAY FIRST")
-
+            for move2 in moves:
+                if not self.aces_consistent(state, move2):
+                    for index, move in enumerate(moves):         
+                        if move[0] is not None and Deck.get_suit(move[0]) == state.get_trump_suit():
+                            moves_trump_suit.append(move)
+                            if state.get_stock_size() == 10:
+                                if len(moves_trump_suit) > 3:
+                                    print("WE PLAY FIRST, ACE PROB")
+                                    return move2
+                                
             #Get all trump suit moves available
-            for index, move in enumerate(moves):
-                
+            for index, move in enumerate(moves):         
                 if move[0] is not None and Deck.get_suit(move[0]) == state.get_trump_suit():
                     moves_trump_suit.append(move)
 
@@ -50,12 +71,6 @@ class Bot:
 
         # Else our bot plays a strategy
         else:
-
-            '''
-            TODO:   Implement the play trump tactic if we don't have a legible card to play
-                    Optimize cheap strategy to play lowest card first
-            '''
-
             # Is our best card worse than the opponents played card?
             for index, move in enumerate(moves):
                 if move[0] is not None and move[0] % 5 <= chosen_move[0] % 5:
