@@ -13,7 +13,7 @@ from sklearn.externals import joblib
 
 # Path of the model we will use. If you make a model
 # with a different name, point this line to its path.
-DEFAULT_MODEL = os.path.dirname(os.path.realpath(__file__)) + '/model.pkl'
+DEFAULT_MODEL = os.path.dirname(os.path.realpath(__file__)) + '/test.pkl'
 
 class Bot:
 
@@ -138,9 +138,14 @@ def features(state):
     opponents_played_card = state.get_opponents_played_card()
 
     # Get moves
-    current_hand = state.hand()
+    moves = state.hand()
 
-
+    trumpJack = False
+    for index, move in enumerate(moves):
+        if index % 5 == 4:
+            rank, suit = util.get_card_name(move)
+            if suit == trump_suit:
+                trumpJack = True
     ################## You do not need to do anything below this line ########################
 
     perspective = state.get_perspective()
@@ -185,6 +190,8 @@ def features(state):
 
     # Append one-hot encoded whose_turn to feature set
     feature_set += [1, 0] if whose_turn == 1 else [0, 1]
+
+    feature_set += [1,0] if trumpJack == True else [0,1]
 
     # Append one-hot encoded opponent's card to feature set
     opponents_played_card_onehot = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]

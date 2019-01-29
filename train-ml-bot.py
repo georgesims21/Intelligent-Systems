@@ -120,7 +120,7 @@ parser.add_argument("--no-train",
 options = parser.parse_args()
 
 if options.overwrite or not os.path.isfile(options.dset_path):
-    create_dataset(options.dset_path, player=bully.Bot(), games=10000)
+    create_dataset(options.dset_path, player=bully.Bot(), games=1000)
 
 if options.train:
 
