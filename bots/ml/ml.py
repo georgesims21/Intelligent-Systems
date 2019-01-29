@@ -146,6 +146,7 @@ def features(state):
             rank, suit = util.get_card_name(move)
             if suit == trump_suit:
                 trumpJack = True
+    
     ################## You do not need to do anything below this line ########################
 
     perspective = state.get_perspective()
@@ -200,13 +201,17 @@ def features(state):
 
     # To find jack of trumps
 
-    # moves = state.hand()
+    # moves = state.moves()
 
-    # for index, moves in enumerate(moves):
+    # for index, moves in enumerate(current_hand):
     #     if index % 5 == 5:
     #         feature_set += [1, 0]
+    #         break
     #     else:
     #         feature_set += [0, 1]
+
+    # state.get_trump_suit()
+           
 
     # # To find ace of trumps
     # for index, move in enumerate(moves):
@@ -217,24 +222,7 @@ def features(state):
 
     # current_hand_trump_onehot = [0, 0, 0, 0, 0]
 
-    # for card in current_hand:
-    #     # ACE
-    #     if card % 5 == 0:
-    #         current_hand_trump_onehot = [1, 0, 0, 0, 0]
-    #     # TEN
-    #     elif card % 5 == 1:
-    #         current_hand_trump_onehot = [0, 1, 0, 0, 0]
-    #     # KING
-    #     elif card % 5 == 2:
-    #         current_hand_trump_onehot = [0, 0, 1, 0, 0]
-    #     # QUEEN
-    #     elif card % 5 == 3:
-    #         current_hand_trump_onehot = [0, 0, 0, 1, 0]
-    #     # JACK
-    #     elif card % 5 == 4:
-    #         current_hand_trump_onehot = [0, 0, 0, 0, 1]
-
-    #     feature_set += current_hand_trump_onehot
+    
 
 
     # Return feature set

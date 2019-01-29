@@ -26,10 +26,95 @@ class Bot:
 
         random.shuffle(moves)
 
+        # --------------- implement probability here ---------------- #
+
+        # 20 cards in total, 1 is overturned for the trump in phase 1. 5 in each players hand. 5 of the total are trump cards
+
+                #      	    Aces 	10s 	Kings 	Queens 	Jacks
+        # Clubs 	    0 	    1 	    2 	    3 	    4
+        # Diamonds 	    5 	    6 	    7 	    8 	    9
+        # Hearts 	    10 	    11 	    12 	    13 	    14
+        # Spades 	    15 	    16 	    17 	    18 	    19
+
+        # state = State.generate()
+        # To deterministically generate the same state each time, the generate method can also take a seed, like so:
+        # print("TEST STATE:")
+        # state = State.generate(1)
+        # This will always generate the same starting state, to make testing/debugging your bots easier.
+        # Note that any two states generated with the same seed will be identical, and 25 is only used here as an example.
+        # print(state) #-- formats the same as each trick when playing play.py against two bots
+
+        # to extract points from certain player
+        # me = state.whose_turn()
+        # opponent = util.other(me)
+        # own_points = state.get_points(me)
+        # opponents_points = state.get_points(opponent)
+
+        # State.make_assumption()
+		# Takes the current imperfect information state and makes a 
+		# random guess as to the states of the unknown cards.
+		# :return: A perfect information state object.
+
+        size_of_stock = state.get_stock_size() # int, max 10 min 0 in phase 2
+
+        total_aces_in_deck = 4
+        total_tens_in_deck = 4
+        total_kings_in_deck = 4
+        total_queens_in_deck = 4
+        total_jacks_in_deck = 4
+        my_aces = 0
+
+        hand = state.hand()
+
+        # Negate hand cards from possibilities
+        for index in hand:
+            if index % 5 == 0:
+                my_aces = my_aces + 1
+                total_aces_in_deck = total_aces_in_deck - 1 
+                
+            elif index % 5 == 1:
+                total_tens_in_deck = total_tens_in_deck - 1
+            elif index % 5 == 2:
+                total_kings_in_deck = total_kings_in_deck - 1
+            elif index % 5 == 3:
+                total_queens_in_deck = total_queens_in_deck - 1
+            elif index % 5 == 4:
+                total_jacks_in_deck = total_jacks_in_deck - 1
+        
+        secret_formula = 1 - (((size_of_stock - my_aces) / 5) / (20 / 5))
+
+        print("MY ACES = ", my_aces)
+
+        if secret_formula < 0.2:
+            print("I HAVE AN ACE")
+            
+
+
+            
+            
+            
+
+
+
+        
+
+
+
+
+
+        # --------------- implement probability here ---------------- #
+
         # If the opponent hasn't played a card
         if state.get_opponents_played_card() is None:
             
-            #print("WE PLAY FIRST")
+            '''
+            TODO: 
+            Extract already played cards info
+            Extract cards in hand info*
+            Extract how many cards are left in the deck*
+            Calculate the chance of certain card being played based on this info
+
+            '''
 
             #Get all trump suit moves available
             for index, move in enumerate(moves):
