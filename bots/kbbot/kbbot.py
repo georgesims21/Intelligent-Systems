@@ -21,11 +21,12 @@ class Bot:
     def __init__(self):
         pass
     def get_move(self, state):
-
+        print("eeeeeeeeeeeeeeee",state.get_all_tricks())
         moves = state.moves()
         chosen_move = moves[0]
         moves_trump_suit = []
         random.shuffle(moves)
+        state.save_all_tricks()
         if state.get_prev_trick() != [None,None]:
             card1,card2 = state.get_prev_trick()
             played_cards.append(card1)

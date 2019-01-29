@@ -48,7 +48,6 @@ class State:
 
 		self.__p1_pending_points = p1_pending_points
 		self.__p2_pending_points = p2_pending_points
-
 	def next(self,
 			 move  # type: tuple(int, int)
 			 ):
@@ -68,7 +67,6 @@ class State:
 
 		# Start with a copy of the current state
 		state = self.clone()  # type: State
-
 		# If we find an invalid move, we set the __revoked class variable
 		# To the pid of the player who made the incorrect move, and return the state as is.
 		if not state.__is_valid(move):
@@ -194,6 +192,12 @@ class State:
 			points = 1
 
 		return winner, points
+
+	def get_all_tricks(self):
+		return self.__deck.get_all_tricks()
+	
+	def save_all_tricks(self):
+		self.__deck.save_all_tricks()
 
 	def moves(self):
 		"""

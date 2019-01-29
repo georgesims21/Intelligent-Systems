@@ -1,5 +1,5 @@
 import random
-
+all_played_tricks = []
 class Deck:
 	"""
 	Represents the deck at any given turn.
@@ -73,6 +73,14 @@ class Deck:
 		self.__trump_suit	=  trump_suit if trump_suit is not None else self.get_suit(self.__stock[0])
 
 
+
+	def save_all_tricks(self):
+		global all_played_tricks
+		all_played_tricks.append(self.get_prev_trick())
+
+	def get_all_tricks(self):
+		global all_played_tricks
+		return all_played_tricks
 
 	# Computes the rank of a given card index, following the ordering given above.
 	@staticmethod

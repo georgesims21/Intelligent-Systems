@@ -19,7 +19,7 @@ def play(
 
     # The game loop
     while not state.finished():
-
+        state.save_all_tricks()
         player = player1 if state.whose_turn() == 1 else player2
 
         # We introduce a state signature which essentially obscures the deck's perfect knowledge from the player
@@ -29,7 +29,6 @@ def play(
 
         if is_valid(move, player): # check for common mistakes
 
-
             if move[0] is None:
                 pr('*   Player {} performs a trump jack exchange'.format(state.whose_turn()), verbose)
             
@@ -38,7 +37,6 @@ def play(
                 
                 if move[1] is not None:
                     pr('*   Player {} melds a marriage between {}{} and {}{}'.format(state.whose_turn(), util.get_rank(move[0]), util.get_suit(move[0]), util.get_rank(move[1]), util.get_suit(move[1])), verbose)
-
             state = state.next(move)
             pr(state, verbose)
 
