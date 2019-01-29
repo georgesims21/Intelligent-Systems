@@ -76,7 +76,11 @@ class Deck:
 
 	def save_all_tricks(self):
 		global all_played_tricks
-		all_played_tricks.append(self.get_prev_trick())
+		card1,card2 = self.get_prev_trick()
+		if card1 not in all_played_tricks and card1 != None:
+			all_played_tricks.append(card1)
+		if card2 not in all_played_tricks and card2 != None:
+			all_played_tricks.append(card2)
 
 	def get_all_tricks(self):
 		global all_played_tricks
