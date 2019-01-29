@@ -98,6 +98,7 @@ class Bot:
 		# random guess as to the states of the unknown cards.
 		# :return: A perfect information state object.
 
+<<<<<<< Loan
         aces = self.nb_played(state,"A")
         tens = self.nb_played(state,"10")
         kings = self.nb_played(state,"K")
@@ -122,6 +123,58 @@ class Bot:
         print("\nProb of Trumps:", probTrumps)# Negate hand cards from possibilities
         
 
+=======
+        size_of_stock = state.get_stock_size() # int, max 10 min 0 in phase 2
+
+        total_aces_in_deck = 4
+        total_tens_in_deck = 4
+        total_kings_in_deck = 4
+        total_queens_in_deck = 4
+        total_jacks_in_deck = 4
+        my_aces = 0
+
+        hand = state.hand()
+
+        # Negate hand cards from possibilities
+        for index in hand:
+            if index % 5 == 0:
+                my_aces = my_aces + 1
+                total_aces_in_deck = total_aces_in_deck - 1 
+                
+            elif index % 5 == 1:
+                total_tens_in_deck = total_tens_in_deck - 1
+            elif index % 5 == 2:
+                total_kings_in_deck = total_kings_in_deck - 1
+            elif index % 5 == 3:
+                total_queens_in_deck = total_queens_in_deck - 1
+            elif index % 5 == 4:
+                total_jacks_in_deck = total_jacks_in_deck - 1
+        
+        secret_formula = 1 - (((size_of_stock - my_aces) / 5) / (20 / 5))
+
+        print("MY ACES = ", my_aces)
+
+        if secret_formula < 0.2:
+            print("I HAVE AN ACE")
+            
+
+
+            
+            
+            
+
+
+
+        
+
+
+
+
+
+        # --------------- implement probability here ---------------- #
+
+        # If the opponent hasn't played a card
+>>>>>>> Magic formula
         if state.get_opponents_played_card() is None:
             
             '''
