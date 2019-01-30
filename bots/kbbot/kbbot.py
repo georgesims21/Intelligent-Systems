@@ -12,6 +12,9 @@ from api import State, util, Deck
 import random
 from . import load
 from .kb import KB, Boolean, Integer
+from scipy.stats import hypergeom
+
+import numpy as np
 
 played_cards = []
 
@@ -20,42 +23,89 @@ class Bot:
 
     def __init__(self):
         pass
+
     def get_move(self, state):
-        print("eeeeeeeeeeeeeeee",state.get_all_tricks())
+
         moves = state.moves()
         chosen_move = moves[0]
         moves_trump_suit = []
+        my_aces = 0
         random.shuffle(moves)
-        state.save_all_tricks()
-        if state.get_prev_trick() != [None,None]:
-            card1,card2 = state.get_prev_trick()
-            played_cards.append(card1)
-            played_cards.append(card2)
+        my_hand = state.hand()
 
-        #Get the number of trump card played
-        trump_played = 0
-        if len(played_cards) != 0:
-            for card in played_cards:
-                if util.get_suit(card) == state.get_trump_suit():
-                    trump_played += 1
-               
+        # --------------- implement probability here ---------------- #
 
-        # If the opponent hasn't played a card
+        # 20 cards in total, 1 is overturned for the trump in phase 1. 5 in each players hand. 5 of the total are trump cards
+
+                #      	    Aces 	10s 	Kings 	Queens 	Jacks
+        # Clubs 	    0 	    1 	    2 	    3 	    4
+        # Diamonds 	    5 	    6 	    7 	    8 	    9
+        # Hearts 	    10 	    11 	    12 	    13 	    14
+        # Spades 	    15 	    16 	    17 	    18 	    19
+
+        # state = State.generate()
+        # To deterministically generate the same state each time, the generate method can also take a seed, like so:
+        # print("TEST STATE:")
+        # state = State.generate(1)
+        # This will always generate the same starting state, to make testing/debugging your bots easier.
+        # Note that any two states generated with the same seed will be identical, and 25 is only used here as an example.
+        # print(state) #-- formats the same as each trick when playing play.py against two bots
+
+        # to extract points from certain player
+        # me = state.whose_turn()
+        # opponent = util.other(me)
+        # own_points = state.get_points(me)
+        # opponents_points = state.get_points(opponent)
+
+        # State.make_assumption()
+		# Takes the current imperfect information state and makes a 
+		# random guess as to the states of the unknown cards.
+		# :return: A perfect information state object.
+
+        size_of_stock = state.get_stock_size() # int, max 10 min 0 in phase 2
+
+
+
+
+        for index in my_hand:
+            if util.get_rank(index)== "A":
+                my_aces = my_aces + 1
+
+        played_aces = 0
+        trickplayed = state.get_all_tricks()
+        for index in trickplayed:
+            if util.get_rank(index)== "A":
+                played_aces = played_aces + 1
+
+
+        # Negate hand cards from possibilities
+        stock = state.get_stock_size() + 5
+        x = 1
+        if my_aces + played_aces == 4:
+            final = 1
+        else:      
+            secret_formula = hypergeom(stock , 4-(my_aces + played_aces), 5)
+            arange = np.arange(0, 4)
+            notAce = secret_formula.pmf(arange)
+            probHasAce = 1-test[0] 
+            print("FORMULA = ", probHasAce, stock,played_aces+my_aces)
+
+        print("FORMULA = ", played_aces+my_aces)
+
         if state.get_opponents_played_card() is None:
             
-            #print("WE PLAY FIRST")
-            for move2 in moves:
-                if not self.aces_consistent(state, move2):
-                    for index, move in enumerate(moves):         
-                        if move[0] is not None and Deck.get_suit(move[0]) == state.get_trump_suit():
-                            moves_trump_suit.append(move)
-                            if state.get_stock_size() == 10:
-                                if len(moves_trump_suit) > 3:
-                                    print("WE PLAY FIRST, ACE PROB")
-                                    return move2
-                                
+            '''
+            TODO: 
+            Extract already played cards info
+            Extract cards in hand info*
+            Extract how many cards are left in the deck*
+            Calculate the chance of certain card being played based on this info
+
+            '''
+
             #Get all trump suit moves available
-            for index, move in enumerate(moves):         
+            for index, move in enumerate(moves):
+                
                 if move[0] is not None and Deck.get_suit(move[0]) == state.get_trump_suit():
                     moves_trump_suit.append(move)
 
@@ -72,6 +122,12 @@ class Bot:
 
         # Else our bot plays a strategy
         else:
+
+            '''
+            TODO:   Implement the play trump tactic if we don't have a legible card to play
+                    Optimize cheap strategy to play lowest card first
+            '''
+
             # Is our best card worse than the opponents played card?
             for index, move in enumerate(moves):
                 if move[0] is not None and move[0] % 5 <= chosen_move[0] % 5:
