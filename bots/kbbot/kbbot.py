@@ -24,12 +24,38 @@ class Bot:
     def __init__(self):
         pass
 
+    def nb_played(self,state,cardRank):
+
+        played_or_in_hand = 0
+        my_hand = state.hand()
+        for index in my_hand:
+            if util.get_rank(index)== cardRank:
+                played_or_in_hand = played_or_in_hand + 1
+
+        trickplayed = state.get_all_tricks()
+        for index in trickplayed:
+            if util.get_rank(index)== cardRank:
+                played_or_in_hand = played_or_in_hand + 1
+        return played_or_in_hand
+
+    def hypergeometric(self,played_or_in_hand,total_success,state):
+
+        stock = state.get_stock_size() + 5
+        if played_or_in_hand == 4:
+            prob = 0
+        else:      
+            secret_formula = hypergeom(stock , total_success-(played_or_in_hand), 5)
+            arange = np.arange(0, 4)
+            notAce = secret_formula.pmf(arange)
+            prob = 1 - notAce[0]
+        return prob
+    
     def get_move(self, state):
 
         moves = state.moves()
         chosen_move = moves[0]
         moves_trump_suit = []
-        my_aces = 0
+        aces = 0
         random.shuffle(moves)
         my_hand = state.hand()
 
@@ -66,31 +92,14 @@ class Bot:
 
 
 
+        aces = self.nb_played(state,"A")
 
-        for index in my_hand:
-            if util.get_rank(index)== "A":
-                my_aces = my_aces + 1
+        probAces = self.hypergeometric(aces,4,state)
 
-        played_aces = 0
-        trickplayed = state.get_all_tricks()
-        for index in trickplayed:
-            if util.get_rank(index)== "A":
-                played_aces = played_aces + 1
-
+        print("eeeeeeeeeeeeeeeeeee", probAces, aces)
 
         # Negate hand cards from possibilities
-        stock = state.get_stock_size() + 5
-        x = 1
-        if my_aces + played_aces == 4:
-            final = 1
-        else:      
-            secret_formula = hypergeom(stock , 4-(my_aces + played_aces), 5)
-            arange = np.arange(0, 4)
-            notAce = secret_formula.pmf(arange)
-            probHasAce = 1-test[0] 
-            print("FORMULA = ", probHasAce, stock,played_aces+my_aces)
-
-        print("FORMULA = ", played_aces+my_aces)
+        
 
         if state.get_opponents_played_card() is None:
             
