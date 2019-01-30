@@ -97,6 +97,59 @@ def aces_knowledge(kb):
     kb.add_clause(~P10, A10)
     kb.add_clause(~P15, A15)
 
+def kings_information(kb):
+    kb.add_clause(K2)
+    kb.add_clause(K7)
+    kb.add_clause(K12)
+    kb.add_clause(K17)
+
+def kings_knowledge(kb):
+    # Play an ace
+    kb.add_clause(~K2, P2)
+    kb.add_clause(~K7, P7)
+    kb.add_clause(~K12, P12)
+    kb.add_clause(~K17, P17)
+    kb.add_clause(~P2, K2)
+    kb.add_clause(~P7, K7)
+    kb.add_clause(~P12, K12)
+    kb.add_clause(~P17, K17)
+
+
+def queens_information(kb):
+    kb.add_clause(Q3)
+    kb.add_clause(Q8)
+    kb.add_clause(Q13)
+    kb.add_clause(Q18)
+
+def queens_knowledge(kb):
+    # Play an ace
+    kb.add_clause(~Q3, P3)
+    kb.add_clause(~Q8, P8)
+    kb.add_clause(~Q13, P13)
+    kb.add_clause(~Q18, P18)
+    kb.add_clause(~P3, Q3)
+    kb.add_clause(~Q8, Q8)
+    kb.add_clause(~P13, Q13)
+    kb.add_clause(~P18, Q18)
+
+
+def tens_information(kb):
+    kb.add_clause(T1)
+    kb.add_clause(T6)
+    kb.add_clause(T11)
+    kb.add_clause(T16)
+
+def tens_knowledge(kb):
+    # Play an ace
+    kb.add_clause(~T1, P0)
+    kb.add_clause(~T16, P5)
+    kb.add_clause(~T11, P10)
+    kb.add_clause(~T16, P15)
+    kb.add_clause(~P1, T1)
+    kb.add_clause(~P6, T6)
+    kb.add_clause(~P11, T11)
+    kb.add_clause(~P16, T16)
+
 def cheap_information(kb):
     kb.add_clause(J4)
     kb.add_clause(J9)
