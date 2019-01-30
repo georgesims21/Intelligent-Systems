@@ -244,6 +244,48 @@ class Bot:
 
         return akb.satisfiable()
 
+    def kings_consistent(self, state, move):
+    akb = KB()
+
+    load.kings_information(akb)
+    load.kings_knowledge(akb)
+    index = move[0]
+
+    variable_string = "p" + str(index)
+    strategy_variable = Boolean(variable_string)
+
+    akb.add_clause(~strategy_variable)
+
+    return akb.satisfiable()
+
+    def queens_consistent(self, state, move):
+    akb = KB()
+
+    load.queens_information(akb)
+    load.queens_knowledge(akb)
+    index = move[0]
+
+    variable_string = "p" + str(index)
+    strategy_variable = Boolean(variable_string)
+
+    akb.add_clause(~strategy_variable)
+
+    return akb.satisfiable()
+
+    def tens_consistent(self, state, move):
+    akb = KB()
+
+    load.tens_information(akb)
+    load.tens_knowledge(akb)
+    index = move[0]
+
+    variable_string = "p" + str(index)
+    strategy_variable = Boolean(variable_string)
+
+    akb.add_clause(~strategy_variable)
+
+    return akb.satisfiable()
+    
     def cheap_consistent(self, state, move):
         kb = KB()
 
