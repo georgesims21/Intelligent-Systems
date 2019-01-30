@@ -25,7 +25,6 @@ class Bot:
         pass
 
     def nb_played(self,state,cardRank):
-
         played_or_in_hand = 0
         my_hand = state.hand()
         for index in my_hand:
@@ -38,10 +37,23 @@ class Bot:
                 played_or_in_hand = played_or_in_hand + 1
         return played_or_in_hand
 
+    def nb_trump(self,state):
+        played_or_in_hand = 0
+        my_hand = state.hand()
+        for index in my_hand:
+            if util.get_suit(index) == state.get_trump_suit():
+                played_or_in_hand = played_or_in_hand + 1
+
+        trickplayed = state.get_all_tricks()
+        for index in trickplayed:
+            if util.get_suit(index) == state.get_trump_suit():
+                played_or_in_hand = played_or_in_hand + 1
+        return played_or_in_hand
+
     def hypergeometric(self,played_or_in_hand,total_success,state):
 
         stock = state.get_stock_size() + 5
-        if played_or_in_hand == 4:
+        if played_or_in_hand == total_success:
             prob = 0
         else:      
             secret_formula = hypergeom(stock , total_success-(played_or_in_hand), 5)
@@ -55,9 +67,7 @@ class Bot:
         moves = state.moves()
         chosen_move = moves[0]
         moves_trump_suit = []
-        aces = 0
         random.shuffle(moves)
-        my_hand = state.hand()
 
         # --------------- implement probability here ---------------- #
 
@@ -88,17 +98,28 @@ class Bot:
 		# random guess as to the states of the unknown cards.
 		# :return: A perfect information state object.
 
-        size_of_stock = state.get_stock_size() # int, max 10 min 0 in phase 2
-
-
-
         aces = self.nb_played(state,"A")
+        tens = self.nb_played(state,"10")
+        kings = self.nb_played(state,"K")
+        queens = self.nb_played(state,"Q")
+        jacks = self.nb_played(state,"J")
+        nb_trump_played = self.nb_trump(state)
+
 
         probAces = self.hypergeometric(aces,4,state)
+        probTens = self.hypergeometric(tens,4,state)
+        probKings = self.hypergeometric(kings,4,state)
+        probQueens = self.hypergeometric(queens,4,state)
+        probJacks = self.hypergeometric(jacks,4,state)
+        probTrumps = self.hypergeometric(nb_trump_played,5,state)
 
-        print("eeeeeeeeeeeeeeeeeee", probAces, aces)
 
-        # Negate hand cards from possibilities
+        print("\nProb of Aces:", probAces)
+        print("\nProb of Tens:", probTens)
+        print("\nProb of Kings:", probKings)
+        print("\nProb of Queens:", probQueens)
+        print("\nProb of Jacks:", probJacks)
+        print("\nProb of Trumps:", probTrumps)# Negate hand cards from possibilities
         
 
         if state.get_opponents_played_card() is None:
