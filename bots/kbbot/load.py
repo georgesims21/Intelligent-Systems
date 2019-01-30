@@ -141,10 +141,10 @@ def tens_information(kb):
 
 def tens_knowledge(kb):
     # Play an ace
-    kb.add_clause(~T1, P0)
-    kb.add_clause(~T16, P5)
-    kb.add_clause(~T11, P10)
-    kb.add_clause(~T16, P15)
+    kb.add_clause(~T1, P1)
+    kb.add_clause(~T6, P6)
+    kb.add_clause(~T11, P11)
+    kb.add_clause(~T16, P16)
     kb.add_clause(~P1, T1)
     kb.add_clause(~P6, T6)
     kb.add_clause(~P11, T11)

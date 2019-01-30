@@ -192,7 +192,7 @@ def features(state):
     # Append one-hot encoded whose_turn to feature set
     feature_set += [1, 0] if whose_turn == 1 else [0, 1]
 
-    feature_set += [1,0] if trumpJack == True else [0,1]
+    #feature_set += [1,0] if trumpJack == True else [0,1]
 
     # Append one-hot encoded opponent's card to feature set
     opponents_played_card_onehot = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]

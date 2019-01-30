@@ -20,26 +20,16 @@ from sklearn.externals import joblib
 
 from bots.rand import rand
 from bots.bully import bully
-<<<<<<< Loan
 # from bots.rdeep import rdeep
 
-=======
-from bots.rdeep import rdeep
-from bots.ml import ml
->>>>>>> Making two ml bots (ml & ml2) play against eachother
 from bots.ml.ml import features
 
 def create_dataset(path, player=bully.Bot(), games=2000, phase=1):
 
 # The player we'll observe
-<<<<<<< Loan
 # player = rand.Bot()
-player = bully.Bot()
+    player = bully.Bot()
 # player = rdeep.Bot()
-=======
-player = ml.Bot(model_file='./bots/ml/rdeep.pkl')
-# player2 = ml.Bot(model_file='./models/rdeep-model.pkl')
->>>>>>> Making two ml bots (ml & ml2) play against eachother
 
     # For progress bar
     bar_length = 30

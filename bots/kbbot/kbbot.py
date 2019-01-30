@@ -23,6 +23,12 @@ class Bot:
 
     def __init__(self):
         pass
+    def card_played(self,state,cardIndex):
+        trickplayed = state.get_all_tricks()
+        for index in trickplayed:
+            if index == cardIndex:
+                return True
+        return False
 
     def nb_played(self,state,cardRank):
         played_or_in_hand = 0
@@ -67,7 +73,6 @@ class Bot:
         moves = state.moves()
         chosen_move = moves[0]
         moves_trump_suit = []
-        random.shuffle(moves)
 
         # --------------- implement probability here ---------------- #
 
@@ -97,7 +102,7 @@ class Bot:
 		# Takes the current imperfect information state and makes a 
 		# random guess as to the states of the unknown cards.
 		# :return: A perfect information state object.
-
+  
         aces = self.nb_played(state,"A")
         tens = self.nb_played(state,"10")
         kings = self.nb_played(state,"K")
@@ -113,61 +118,66 @@ class Bot:
         probJacks = self.hypergeometric(jacks,4,state)
         probTrumps = self.hypergeometric(nb_trump_played,5,state)
 
-        if state.get_opponents_played_card() is None:   
-            '''
-            TODO: 
-            Extract already played cards info
-            Extract cards in hand info*
-            Extract how many cards are left in the deck*
-            Calculate the chance of certain card being played based on this info
 
-            '''
-            for index, move in enumerate(moves):     
-                if probTrumps < 0.3:
-                    for move in moves:
-                        if not self.aces_consistent(state, move):
-                            #print ("ACE Strategy Applied")
-                            return move
-                elif probTrumps > 0.6
+        if state.get_opponents_played_card() is None: 
+
+            #check for marriage or trump exchange
+            for move in moves:
+                if move[0] != None and move[1] != None:
+                    return move
+                if move[0] == None:
+                    return move
+            for move in moves:
+                if state.get_phase() == 1:
+                    if probTrumps < 0.3:
+                        for move in moves:
+                            if not self.aces_consistent(state, move):
+                                #print("ACE STRAT")                   
+                                return move
+                    else:
+                        for move in moves:
+                            if not self.tens_consistent(state, move):   
+                                if util.get_suit(move[0]) == "C" and util.get_suit(move[0]) != state.get_trump_suit():
+                                    if self.card_played(state,0) == True:
+                                        #print("TENS APPLIED")
+                                        return move
+                                    elif self.hypergeometric(0,1,state) < 0.4   :
+                                        #print("TENS APPLIED 0.3")
+                                        return move
+                                elif util.get_suit(move[0]) == "D" and util.get_suit(move[0]) != state.get_trump_suit:
+                                    if self.card_played(state,5) == True:
+                                        #print("TENS APPLIED")
+                                        return move
+                                    elif self.hypergeometric(0,1,state) < 0.4:
+                                        #print("TENS APPLIED 0.3")
+                                        return move
+                                elif util.get_suit(move[0]) == "H" and util.get_suit(move[0]) != state.get_trump_suit:
+                                    if self.card_played(state,0) == True:
+                                        #print("TENS APPLIED")
+                                        return move
+                                    elif self.hypergeometric(0,1,state) < 0.4:
+                                        #print("TENS APPLIED 0.3")
+                                        return move
+                                elif util.get_suit(move[0]) == "S" and util.get_suit(move[0]) != state.get_trump_suit:
+                                    #print("TENS APPLIED") 
+                                    return move
+                                    if self.card_played(state,0) == True:
+                                        #print("TENS APPLIED") 
+                                        return move
+                                    elif self.hypergeometric(0,1,state) < 0.4:
+                                        #print("TENS APPLIED 0.3") 
+                                        return move     
                     for move in moves:
                         if not self.cheap_consistent(state, move):
                             #print ("CHEAP Strategy Applied")
                             return move
-                elif probTrumps > 0.6
-                    for move in moves:
-                        if not self.cheap_consistent(state, move):
-                            #print ("CHEAP Strategy Applied")
-                            return move
-                        
-
-
-            #Get all trump suit moves available
-            for index, move in enumerate(moves):
-                
-                if move[0] is not None and Deck.get_suit(move[0]) == state.get_trump_suit():
-                    moves_trump_suit.append(move)
-
-            # Return if a trump
-            if len(moves_trump_suit) > 0:
-                return moves_trump_suit[0]
-        
-        # Get move with highest rank available, of any suit
-            for index, move in enumerate(moves):
-                if move[0] is not None and move[0] % 5 <= chosen_move[0] % 5:
-                    chosen_move = move
-            
-            return chosen_move
-
+                    return  random.choice(moves)
+                else:     
+                    return  random.choice(moves)
         # Else our bot plays a strategy
         else:
-
-            '''
-            TODO:   Implement the play trump tactic if we don't have a legible card to play
-                    Optimize cheap strategy to play lowest card first
-            '''
-
             # Is our best card worse than the opponents played card?
-            for index, move in enumerate(moves):
+            for move in moves:
                 if move[0] is not None and move[0] % 5 <= chosen_move[0] % 5:
                     chosen_move = move
             
@@ -176,15 +186,22 @@ class Bot:
                 # not legible.. unless trump card
                 for move in moves:
                     if not self.cheap_consistent(state, move):
-                        #print ("CHEAP Strategy Applied")
+                        #print ("CHEAP Strategy Applied NOT LEADER")
                         return move
             else:
                 # Aces first
                 for move in moves:
-                    if not self.aces_consistent(state, move):
+                    if not self.tens_consistent(state, move):
                         #print ("ACE Strategy Applied")
                         return move
-
+                for move in moves:
+                    if not self.kings_consistent(state, move):
+                        #print ("JACK Strategy Applied")
+                        return move
+                for move in moves:
+                    if not self.queens_consistent(state, move):
+                        #print ("JACK Strategy Applied")
+                        return move
                 # No aces then jacks
                 for move in moves:
                     if not self.jacks_consistent(state, move):
@@ -245,47 +262,47 @@ class Bot:
         return akb.satisfiable()
 
     def kings_consistent(self, state, move):
-    akb = KB()
+        akb = KB()
 
-    load.kings_information(akb)
-    load.kings_knowledge(akb)
-    index = move[0]
+        load.kings_information(akb)
+        load.kings_knowledge(akb)
+        index = move[0]
 
-    variable_string = "p" + str(index)
-    strategy_variable = Boolean(variable_string)
+        variable_string = "p" + str(index)
+        strategy_variable = Boolean(variable_string)
 
-    akb.add_clause(~strategy_variable)
+        akb.add_clause(~strategy_variable)
 
-    return akb.satisfiable()
+        return akb.satisfiable()
 
     def queens_consistent(self, state, move):
-    akb = KB()
+        akb = KB()
 
-    load.queens_information(akb)
-    load.queens_knowledge(akb)
-    index = move[0]
+        load.queens_information(akb)
+        load.queens_knowledge(akb)
+        index = move[0]
 
-    variable_string = "p" + str(index)
-    strategy_variable = Boolean(variable_string)
+        variable_string = "p" + str(index)
+        strategy_variable = Boolean(variable_string)
 
-    akb.add_clause(~strategy_variable)
+        akb.add_clause(~strategy_variable)
 
-    return akb.satisfiable()
+        return akb.satisfiable()
 
     def tens_consistent(self, state, move):
-    akb = KB()
+        akb = KB()
 
-    load.tens_information(akb)
-    load.tens_knowledge(akb)
-    index = move[0]
+        load.tens_information(akb)
+        load.tens_knowledge(akb)
+        index = move[0]
 
-    variable_string = "p" + str(index)
-    strategy_variable = Boolean(variable_string)
+        variable_string = "p" + str(index)
+        strategy_variable = Boolean(variable_string)
 
-    akb.add_clause(~strategy_variable)
+        akb.add_clause(~strategy_variable)
 
-    return akb.satisfiable()
-    
+        return akb.satisfiable()
+
     def cheap_consistent(self, state, move):
         kb = KB()
 
