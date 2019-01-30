@@ -65,7 +65,6 @@ class Bot:
         return played_or_in_hand
 
     def hypergeometric(self,played_or_in_hand,total_success,state):
-
         stock = state.get_stock_size() + 5
         if played_or_in_hand == total_success:
             prob = 0
@@ -81,9 +80,6 @@ class Bot:
         moves = state.moves()
         chosen_move = moves[0]
         moves_trump_suit = []
-        probPlayTen = 0.8
-        probPlayQ = 0.45
-        probPlayK = 0.45
 
         # --------------- implement probability here ---------------- #
 
@@ -95,21 +91,27 @@ class Bot:
         # Hearts 	    10 	    11 	    12 	    13 	    14
         # Spades 	    15 	    16 	    17 	    18 	    19
 
-  
-        aces = self.nb_played(state,"A")
-        tens = self.nb_played(state,"10")
-        kings = self.nb_played(state,"K")
-        queens = self.nb_played(state,"Q")
-        jacks = self.nb_played(state,"J")
-        nb_trump_played = self.nb_trump(state)
+        # state = State.generate()
+        # To deterministically generate the same state each time, the generate method can also take a seed, like so:
+        # print("TEST STATE:")
+        # state = State.generate(1)
+        # This will always generate the same starting state, to make testing/debugging your bots easier.
+        # Note that any two states generated with the same seed will be identical, and 25 is only used here as an example.
+        # print(state) #-- formats the same as each trick when playing play.py against two bots
 
-        probAces = self.hypergeometric(aces,4,state)
-        probTens = self.hypergeometric(tens,4,state)
-        probKings = self.hypergeometric(kings,4,state)
-        probQueens = self.hypergeometric(queens,4,state)
-        probJacks = self.hypergeometric(jacks,4,state)
-        probTrumps = self.hypergeometric(nb_trump_played,5,state)
-        #print(self.hypergeometric(0,1,state))
+        # to extract points from certain player
+        # me = state.whose_turn()
+        # opponent = util.other(me)
+        # own_points = state.get_points(me)
+        # opponents_points = state.get_points(opponent)
+
+        # State.make_assumption()
+		# Takes the current imperfect information state and makes a 
+		# random guess as to the states of the unknown cards.
+		# :return: A perfect information state object.
+  
+       
+
         if state.get_opponents_played_card() is None: 
             #check for marriage or trump exchange
             for move in moves:
@@ -119,34 +121,24 @@ class Bot:
                     return move
             for move in moves:
                 if state.get_phase() == 1:
-                    if probTrumps < 0.3:
-                        for move in moves:
-                            if not self.aces_consistent(state, move):
-                                return move
+                    for move in moves:
+                        if not self.aces_consistent(state, move):
+                            #print("ACE STRAT")                   
+                            return move
                     else:
                         for move in moves:
                             if not self.tens_consistent(state, move):   
                                 if util.get_suit(move[0]) == "C" and util.get_suit(move[0]) != state.get_trump_suit():
-                                    if self.card_played(state,0) == True:                                       
-                                        return move
-                                    elif self.hypergeometric(0,1,state) < probPlayTen: 
-                                        return move
+                                    if self.card_played(state,0) == True:     
+                                        return move 
                                 elif util.get_suit(move[0]) == "D" and util.get_suit(move[0]) != state.get_trump_suit:
-                                    if self.card_played(state,5) == True:                                       
-                                        return move
-                                    elif self.hypergeometric(0,1,state) < probPlayTen: 
+                                    if self.card_played(state,5) == True:
                                         return move
                                 elif util.get_suit(move[0]) == "H" and util.get_suit(move[0]) != state.get_trump_suit:
-                                    if self.card_played(state,10) == True:                                       
+                                    if self.card_played(state,10) == True:
                                         return move
-                                    elif self.hypergeometric(0,1,state) < probPlayTen:
-                                        return move
-                                elif util.get_suit(move[0]) == "S" and util.get_suit(move[0]) != state.get_trump_suit:                                    
-                                    return move
-                                    if self.card_played(state,15) == True:                                         
-                                       return move
-                                    elif self.hypergeometric(0,1,state) < probPlayTen:
-                                        return move     
+                                elif util.get_suit(move[0]) == "S" and util.get_suit(move[0]) != state.get_trump_suit:
+                                        return move  
                     for move in moves:
                         if not self.cheap_consistent(state, move):
                             return move
@@ -198,75 +190,40 @@ class Bot:
                                 if util.get_suit(move[0]) == "C":
                                     if self.card_played(state,4) == True:                                  
                                         return move
-                                    elif self.hypergeometric(0,1,state) < probPlayK:
-                                        return move
                                 elif util.get_suit(move[0]) == "D" and util.get_suit(move[0]) != state.get_trump_suit:
                                     if self.card_played(state,9) == True:                                  
                                         return move
-                                    elif self.hypergeometric(0,1,state) < probPlayK:
-                                        return move
                                 elif util.get_suit(move[0]) == "H" and util.get_suit(move[0]) != state.get_trump_suit:
                                     if self.card_played(state,14) == True:                                
-                                        return move
-                                    elif self.hypergeometric(0,1,state) < probPlayK:
                                         return move
                                 elif util.get_suit(move[0]) == "S" and util.get_suit(move[0]) != state.get_trump_suit:                            
                                     return move
                                     if self.card_played(state,19) == True:                                  
                                         return move
-                                    elif self.hypergeometric(0,1,state) < probPlayK:
-                                        return move   
                             #Play Queen only if queen of same suit has been played   
                             elif util.get_rank(move[0]) == "Q" and util.get_suit(move[0]) != state.get_trump_suit():
                                 if util.get_suit(move[0]) == "C":
                                     if self.card_played(state,3) == True:                                   
                                         return move
-                                    elif self.hypergeometric(0,1,state) < probPlayQ:
-                                        return move
                                 elif util.get_suit(move[0]) == "D" and util.get_suit(move[0]) != state.get_trump_suit:
                                     if self.card_played(state,8) == True:                                   
                                         return move
-                                    elif self.hypergeometric(0,1,state) < probPlayQ:
-                                        return move
                                 elif util.get_suit(move[0]) == "H" and util.get_suit(move[0]) != state.get_trump_suit:
                                     if self.card_played(state,13) == True:                                   
-                                        return move
-                                    elif self.hypergeometric(0,1,state) < probPlayQ:
                                         return move
                                 elif util.get_suit(move[0]) == "S" and util.get_suit(move[0]) != state.get_trump_suit:                                
                                     return move
                                     if self.card_played(state,18) == True:                                   
                                         return move
-                                    elif self.hypergeometric(0,1,state) < probPlayQ:
-                                        return move   
                     return random.choice(moves)
                 else:
-                    for index, move in enumerate(moves):
-                        if move[0] is not None and Deck.get_suit(move[0]) == state.get_trump_suit():
-                            moves_trump_suit.append(move)
-                        if len(moves_trump_suit) > 0:
-                            chosen_move = moves_trump_suit[len(moves_trump_suit)-1]
-                    if util.get_suit(state.get_opponents_played_card()) != state.get_trump_suit():
-                        if len(moves_trump_suit) > 0:
-                            chosen_move = moves_trump_suit[len(moves_trump_suit)-1]
-                            return chosen_move
-                    else:
-                        if len(moves_trump_suit) > 0:
-                            chosen_move = moves_trump_suit[len(moves_trump_suit)-1]
-                            return chosen_move
                     for move in moves:
                         if not self.cheap_consistent(state, move):
                             return move
                     return random.choice(moves)
+
             else:
-                if util.get_suit(state.get_opponents_played_card()) == state.get_trump_suit():
-                    if util.get_suit(chosen_move[0]) == state.get_trump_suit():
-                        return chosen_move     
-                else:
-                    for move in moves:
-                        if not self.cheap_consistent(state, move):
-                            return move
-            return random.choice(moves)     
+                return chosen_move
             # If no move that is entailed by the kb is found, play random move
             #print ("Strategy Not Applied")
     # Note: In this example, the state object is not used,
