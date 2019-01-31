@@ -46,7 +46,7 @@ def play(
         
         else:
             state.set_to_revoked()
-
+    state.reset_all_tricks()
     pr('Game finished. Player {} has won, receiving {} points.'.format(state.winner()[0], state.winner()[1]), verbose)
 
     return state.winner()

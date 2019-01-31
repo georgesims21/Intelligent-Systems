@@ -82,6 +82,10 @@ class Deck:
 		if card2 not in all_played_tricks and card2 != None:
 			all_played_tricks.append(card2)
 
+	def reset_all_tricks(self):
+		global all_played_tricks
+		all_played_tricks = []
+
 	def get_all_tricks(self):
 		global all_played_tricks
 		return all_played_tricks

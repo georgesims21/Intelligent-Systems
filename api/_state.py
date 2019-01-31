@@ -199,6 +199,9 @@ class State:
 	def save_all_tricks(self):
 		self.__deck.save_all_tricks()
 
+	def reset_all_tricks(self):
+		self.__deck.reset_all_tricks()
+
 	def moves(self):
 		"""
 		:return: A list of all the legal moves that can be made by the player whose turn it is.

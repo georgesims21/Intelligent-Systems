@@ -30,14 +30,6 @@ class Bot:
                 return True
         return False
 
-    def should_play(self,state,cardRank,threshold):
-        trickplayed = state.get_all_tricks()
-        for index in trickplayed:
-            if index == cardIndex:
-                return True
-        return False
-
-
     def nb_played(self,state,cardRank):
         played_or_in_hand = 0
         my_hand = state.hand()
@@ -80,37 +72,6 @@ class Bot:
         moves = state.moves()
         chosen_move = moves[0]
         moves_trump_suit = []
-
-        # --------------- implement probability here ---------------- #
-
-        # 20 cards in total, 1 is overturned for the trump in phase 1. 5 in each players hand. 5 of the total are trump cards
-
-                #      	    Aces 	10s 	Kings 	Queens 	Jacks
-        # Clubs 	    0 	    1 	    2 	    3 	    4
-        # Diamonds 	    5 	    6 	    7 	    8 	    9
-        # Hearts 	    10 	    11 	    12 	    13 	    14
-        # Spades 	    15 	    16 	    17 	    18 	    19
-
-        # state = State.generate()
-        # To deterministically generate the same state each time, the generate method can also take a seed, like so:
-        # print("TEST STATE:")
-        # state = State.generate(1)
-        # This will always generate the same starting state, to make testing/debugging your bots easier.
-        # Note that any two states generated with the same seed will be identical, and 25 is only used here as an example.
-        # print(state) #-- formats the same as each trick when playing play.py against two bots
-
-        # to extract points from certain player
-        # me = state.whose_turn()
-        # opponent = util.other(me)
-        # own_points = state.get_points(me)
-        # opponents_points = state.get_points(opponent)
-
-        # State.make_assumption()
-		# Takes the current imperfect information state and makes a 
-		# random guess as to the states of the unknown cards.
-		# :return: A perfect information state object.
-  
-       
 
         if state.get_opponents_played_card() is None: 
             #check for marriage or trump exchange
